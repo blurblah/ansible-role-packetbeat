@@ -1,0 +1,11 @@
+name: {{ packetbeat_name }}
+packetbeat:
+  interfaces.device: {{ packetbeat_device }}
+  protocols:
+    - type: http
+      ports: [80]
+    - type: https
+      ports: [443]
+
+output.logstash:
+  hosts: ["{{ logstash_host }}:{{ logstash_port }}"]

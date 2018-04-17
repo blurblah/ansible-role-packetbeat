@@ -1,0 +1,33 @@
+---
+- import_tasks: check_system.yml
+
+- name: Add gpg-key on ubuntu
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: Add repository on ubuntu
+  apt_repository:
+    repo: 'deb https://artifacts.elastic.co/packages/{{ packetbeat_version }}/apt stable main'
+    filename: 'elastic-{{ packetbeat_version }}.list'
+
+- name: Install packetbeat on ubuntu
+  apt: name=packetbeat
+
+- name: Get a short hostname
+  shell: hostname -s
+  register: hostname_short
+
+#- name: Register packetbeat_name variable using a short hostname
+#  set_fact: packetbeat_name="{{ hostname_short.stdout | lower }}"
+
+#- name: Replace filebeat.yml
+#  template:
+#    src: packetbeat.yml.j2
+#    dest: /etc/packetbeat/packetbeat.yml
+
+#- name: Start services
+#  systemd:
+#    daemon_reload: yes
+#    name: packetbeat
+#    enabled: yes
+#    state: restarted
