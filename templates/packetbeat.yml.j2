@@ -1,0 +1,18 @@
+name: {{ packetbeat_name }}
+packetbeat:
+  interfaces.device: {{ packetbeat_device }}
+  protocols:
+    - type: icmp
+      enabled: {{ packetbeat_icmp_enabled }}
+{% for protocol in packetbeat_protocols %}
+    - type: {{ protocol.type }}
+      ports: [{% for port in protocol.ports %}{{ port }}{% if not loop.last %},{% endif %}{% endfor %}]
+{% endfor %}
+
+output.logstash:
+  hosts: ["{{ out_logstash.host }}:{{ out_logstash.port }}"]
+
+logging.level: {{ packetbeat_loglevel }}
+{% if packetbeat_loglevel == 'debug' and packetbeat_logselectors is defined %}
+logging.selectors: [{% for selector in packetbeat_logselectors %}"{{ selector }}"{% if not loop.last %},{% endif %}{% endfor %}]
+{% endif %}

@@ -1,3 +1,5 @@
 ---
 packetbeat_version: 6.x
 packetbeat_device: any
+packetbeat_loglevel: info
+packetbeat_icmp_enabled: 'false'

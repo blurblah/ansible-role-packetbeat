@@ -1,5 +1,6 @@
 ---
 - import_tasks: check_system.yml
+- import_tasks: check_variables.yml
 
 - name: Add gpg-key on ubuntu
   apt_key:
@@ -17,17 +18,18 @@
   shell: hostname -s
   register: hostname_short
 
-#- name: Register packetbeat_name variable using a short hostname
-#  set_fact: packetbeat_name="{{ hostname_short.stdout | lower }}"
+- name: Register packetbeat_name variable using a short hostname
+  set_fact: packetbeat_name="{{ hostname_short.stdout | lower }}"
+  when: packetbeat_name is undefined
 
-#- name: Replace filebeat.yml
-#  template:
-#    src: packetbeat.yml.j2
-#    dest: /etc/packetbeat/packetbeat.yml
+- name: Replace filebeat.yml
+  template:
+    src: packetbeat.yml.j2
+    dest: /etc/packetbeat/packetbeat.yml
 
-#- name: Start services
-#  systemd:
-#    daemon_reload: yes
-#    name: packetbeat
-#    enabled: yes
-#    state: restarted
+- name: Start services
+  systemd:
+    daemon_reload: yes
+    name: packetbeat
+    enabled: yes
+    state: restarted

@@ -1,0 +1,10 @@
+---
+- name: Check packetbeat_protocols
+  fail:
+    msg: Undefined variables packetbeat_protocols
+  when: packetbeat_protocols is undefined or packetbeat_protocols|length <= 0
+
+- name: Check logstash connection variable
+  fail:
+    msg: Undefined variable out_logstash
+  when: out_logstash is undefined or out_logstash.host is undefined or out_logstash.port is undefined
